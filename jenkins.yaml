@@ -2,12 +2,30 @@ jenkins:
   authorizationStrategy:
     loggedInUsersCanDoAnything:
       allowAnonymousRead: false
+  clouds:
+    - docker:
+        dockerApi:
+          dockerHost:
+            uri: "unix:///var/run/docker.sock"
+        name: "docker"
+        templates:
+          - connector: "attach"
+            dockerTemplateBase:
+              cpuPeriod: 0
+              cpuQuota: 0
+              image: "jvalentino2/jenkins-agent-docker:latest"
+              privileged: true
+            labelString: "docker-agent"
+            name: "dockerTemplateBase"
+            pullStrategy: PULL_ALWAYS
+            pullTimeout: 300
   crumbIssuer:
     standard:
       excludeClientIPFromCrumb: false
   disableRememberMe: false
   labelAtoms:
     - name: "built-in"
+    - name: "docker-agent"
   markupFormatter: "plainText"
   mode: NORMAL
   myViewsTabBar: "standard"
@@ -140,7 +158,7 @@ tool:
     settingsProvider: "standard"
 jobs:
   - script: >
-      multibranchPipelineJob('configuration-as-code') {
+      multibranchPipelineJob("${DSL_JOB_ID}") {
           branchSources {
               git {
                   id = "${DSL_JOB_ID}"

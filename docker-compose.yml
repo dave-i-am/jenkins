@@ -2,8 +2,12 @@ services:
   jenkins:
     build: .
     container_name: jenkins
+    privileged: true
     ports:
       - "8190:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: root
     environment:
       - GITHUB_TOKEN=${GITHUB_TOKEN}
       - JENKINS_ADMIN_PASSWORD=${JENKINS_ADMIN_PASSWORD}
