@@ -5,8 +5,7 @@ USER root
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN jenkins-plugin-cli \
         --verbose \
-        --plugin-file /usr/share/jenkins/ref/plugins.txt \
-        --plugin-download-directory /plugin-download-cache
+        --plugin-file /usr/share/jenkins/ref/plugins.txt
 
 COPY jenkins.yaml /var/jenkins_home/jenkins.yaml
 
